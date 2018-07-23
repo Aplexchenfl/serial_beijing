@@ -1,0 +1,12 @@
+{
+    "COM1" :
+    {
+        "name" : "/dev/ttyO1",
+        "baudrate" : 115200
+    },
+    "COM2" :
+    {
+        "name" : "/dev/ttyO2",
+        "baudrate" : 115200
+    }
+}
