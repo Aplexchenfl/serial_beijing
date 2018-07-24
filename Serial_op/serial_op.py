@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 import json
-#import serial
+import serial
 import threading
 import time
+import os
 from config import *
 
 class serial_op(threading.Thread):
@@ -12,8 +13,26 @@ class serial_op(threading.Thread):
         self.threadID = threadID
         self.name = name
         self.cfg = cfg
+        self.ser = serial.Serial(self.cfg['port'], self.cfg['baudrate'], timeout = self.cfg['timeout'])
+
+    def readmsg_to_sd(self):
+        while True:
+            self.recvmsg = self.ser.read(size = 64)
+
+            if (len(self.recvmsg) > 0):
+                print(recv.recvmsg)
+                with open(self.file_name, "a") as f :
+                    f.write(str(self.recvmsg))
+
+            print("run thread ~~")
+
+    def get_file_name(self):
+        self.file_name = "/root/sd_data/" + str(round(time.time())) + ".txt"
+        print(self.file_name)
 
     def run(self):
+        self.get_file_name()
+        self.readmsg_to_sd()
         print(self.cfg)
 
 if __name__ == "__main__":

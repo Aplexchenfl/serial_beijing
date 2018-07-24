@@ -1,12 +1,14 @@
 {
     "COM1" :
     {
-        "name" : "/dev/ttyO1",
-        "baudrate" : 115200
+        "port" : "/dev/ttyO1",
+        "baudrate" : 460800,
+        "timeout" : 5
     },
     "COM2" :
     {
-        "name" : "/dev/ttyO2",
-        "baudrate" : 115200
+        "port" : "/dev/ttyO2",
+        "baudrate" : 460800,
+        "timeout" : 5
     }
 }
