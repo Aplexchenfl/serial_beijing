@@ -20,11 +20,11 @@ class serial_op(threading.Thread):
             self.recvmsg = self.ser.read(size = 64)
 
             if (len(self.recvmsg) > 0):
-                print(recv.recvmsg)
-                with open(self.file_name, "a") as f :
-                    f.write(str(self.recvmsg))
+                #print(self.recvmsg)
+                with open(self.file_name, "ab") as f :
+                    f.write(self.recvmsg)
 
-            print("run thread ~~")
+            #print("run thread ~~")
 
     def get_file_name(self):
         self.file_name = "/root/sd_data/" + str(round(time.time())) + ".txt"
