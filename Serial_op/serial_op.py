@@ -10,28 +10,39 @@ from Serial_op.config import *
 serial_op_lock = threading.Lock()
 
 class serial_op(threading.Thread):
-    def __init__(self, threadID, name, cfg):
+    def __init__(self, name, cfg, event):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.event = event
         self.name = name
         self.cfg = cfg
         self.ser = serial.Serial(self.cfg['port'], self.cfg['baudrate'], timeout = self.cfg['timeout'])
 
     def readmsg_to_sd(self):
         while True:
-            self.recvmsg = self.ser.read(size = 64)
+            if self.event.is_set():
+                self.recvmsg = self.ser.read(size = 64)
 
-            if (len(self.recvmsg) > 0):
-                serial_op_lock.acquire()
-                #print(self.recvmsg)
-                with open(self.file_name, "ab+") as f :
-                    f.write(self.recvmsg)
-                serial_op_lock.release()
+                if (len(self.recvmsg) > 0):
+                    serial_op_lock.acquire()
+                    #print(self.recvmsg)
+                    try :
+                        with open(self.file_name, "ab+") as f :
+                            f.write(self.recvmsg)
+                    except :
+                        print("write error")
+                        pass
+                    serial_op_lock.release()
 
-            #print("run thread ~~")
+                #print("run thread ~~")
+            else:
+                self.get_file_name()
+                pass
 
     def get_file_name(self):
-        self.file_name = "/root/sd_data/" + str(round(time.time())) + ".txt"
+        #self.file_name = "/root/sd_data/" + str(round(time.time())) + ".txt"
+        file_name = time.strftime("%Y%m%d%H%M%S", time.localtime())
+        self.file_name = "/root/sd_data/" + file_name + ".txt"
+
         #print(self.file_name)
 
     def run(self):
@@ -40,7 +51,7 @@ class serial_op(threading.Thread):
         print(self.cfg)
 
 if __name__ == "__main__":
-    test = serial_op(1, "test", config.config['COM1'])
+    test = serial_op("test", config.config['COM1'])
     test.start()
     test.join()
 
