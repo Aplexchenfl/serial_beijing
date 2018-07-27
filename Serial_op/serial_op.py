@@ -29,6 +29,18 @@ class serial_op(threading.Thread):
                         with open(self.file_name, "ab+") as f :
                             f.write(self.recvmsg)
                     except :
+                        os.system("umount  /root/sd_data")
+                        os.system("umount  /dev/mmcblk0p1")
+
+                        if os.path.exists("/dev/mmcblk0p1"):
+                            try :
+                                os.system("mount -t vfat /dev/mmcblk0p1  /root/sd_data")
+                            except :
+                                print("mmc error")
+                                pass
+                        else :
+                            pass
+
                         print("write error")
                         pass
                     serial_op_lock.release()
