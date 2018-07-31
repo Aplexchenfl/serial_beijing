@@ -15,7 +15,6 @@ if __name__ == "__main__":
     test2.start()
 
     test1.join()
-    test2.join()
 
     time.sleep(2)
 

@@ -19,9 +19,9 @@ class serial_op(threading.Thread):
 
     def readmsg_to_sd(self):
         while True:
-            if self.event.is_set():
-                self.recvmsg = self.ser.read(size = 64)
+            self.recvmsg = self.ser.read(size = 64)
 
+            if self.event.is_set():
                 if (len(self.recvmsg) > 0):
                     serial_op_lock.acquire()
                     #print(self.recvmsg)
